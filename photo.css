@@ -1,0 +1,187 @@
+/* photo: the editor. Colours, the accent and the corner radius are custom properties on .ph. The editor is dark on
+   purpose, so a picture's colours read true while they are being changed. */
+
+.ph {
+  --ph-bg: #0e0e10;
+  --ph-surface: #1a1a1d;
+  --ph-raised: #26262a;
+  --ph-text: #f2f1ec;
+  --ph-muted: #9a9a9f;
+  --ph-accent: #2ff0b8;
+  --ph-accent-ink: #04392a;
+  --ph-radius: 8px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  background: var(--ph-bg);
+  color: var(--ph-text);
+  font: 400 14px/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.ph:focus { outline: none; }
+
+.ph-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: max(8px, env(safe-area-inset-top)) 10px 8px;
+}
+.ph-history { display: flex; gap: 4px; }
+
+.ph-btn {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ph-radius);
+  background: transparent;
+  color: var(--ph-text);
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease, opacity 140ms ease, transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ph-btn svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ph-btn svg .fill { fill: currentColor; stroke: none; }
+.ph-btn:hover { background: rgb(255 255 255 / 0.08); }
+.ph-btn:active { transform: scale(0.96); }
+.ph-btn:disabled { opacity: 0.3; cursor: default; }
+.ph-btn:disabled:hover { background: transparent; }
+.ph-btn:disabled:active { transform: none; }
+.ph-btn:focus-visible { outline: 2px solid var(--ph-accent); outline-offset: 1px; }
+.ph-btn[aria-pressed="true"] { background: var(--ph-raised); color: var(--ph-accent); }
+.ph-done { background: var(--ph-accent); color: var(--ph-accent-ink); }
+.ph-done:hover { background: var(--ph-accent); filter: brightness(1.06); }
+.ph-done svg { stroke-width: 2.2; }
+
+/* The picture. A drag on it crops or draws, never scrolls the page. */
+.ph-stage { position: relative; min-height: 0; overflow: hidden; touch-action: none; }
+.ph-canvas { position: absolute; inset: 0; display: block; }
+.ph-stage[data-tool="draw"] { cursor: crosshair; }
+.ph-text-input {
+  position: absolute;
+  z-index: 1;
+  min-width: 120px;
+  margin: 0;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 2px;
+  background: rgb(0 0 0 / 0.35);
+  outline: 1.5px dashed rgb(255 255 255 / 0.8);
+  font: 650 16px/1.1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  caret-color: currentColor;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* The tool's controls, then the row of tools. */
+.ph-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 18px;
+  min-height: 64px;
+  padding: 10px 12px;
+  background: var(--ph-surface);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+.ph-group { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; }
+.ph-wide { flex-basis: 100%; }
+.ph-chip { width: 40px; height: 40px; }
+.ph-sliders { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 6px 24px; width: min(640px, 100%); }
+
+.ph-slider { display: grid; grid-template-columns: 22px minmax(0, 1fr) 44px; align-items: center; gap: 10px; width: 100%; max-width: 420px; margin: 0 auto; color: var(--ph-muted); }
+.ph-slider > svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ph-slider > svg .fill { fill: currentColor; stroke: none; }
+.ph-value { color: var(--ph-text); font: 500 12.5px/1 ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums; text-align: right; }
+.ph-range {
+  --fill: 50%;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ph-range:focus { outline: none; }
+/* The track fills from the middle, where nothing changes, out to the value. */
+.ph-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--ph-raised) min(50%, var(--fill)), var(--ph-text) min(50%, var(--fill)) max(50%, var(--fill)), var(--ph-raised) max(50%, var(--fill)));
+}
+.ph-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--ph-raised) min(50%, var(--fill)), var(--ph-text) min(50%, var(--fill)) max(50%, var(--fill)), var(--ph-raised) max(50%, var(--fill)));
+}
+.ph-range::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ph-text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ph-range::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 999px; background: var(--ph-text); box-shadow: 0 1px 3px rgb(0 0 0 / 0.5); }
+.ph-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--ph-accent); outline-offset: 2px; }
+.ph-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--ph-accent); outline-offset: 2px; }
+
+.ph-looks { flex-wrap: nowrap; gap: 8px; max-width: 100%; padding: 2px; overflow-x: auto; scrollbar-width: none; }
+.ph-looks::-webkit-scrollbar { display: none; }
+.ph-look {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--ph-radius);
+  background: var(--ph-raised);
+  cursor: pointer;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease;
+}
+.ph-look:active { transform: scale(0.96); }
+.ph-look[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ph-surface), 0 0 0 4px var(--ph-accent); }
+.ph-look:focus-visible { outline: 2px solid var(--ph-accent); outline-offset: 3px; }
+.ph-thumb { display: block; width: 100%; height: 100%; }
+
+.ph-swatch { width: 40px; height: 40px; }
+.ph-swatch::before { content: ""; width: 22px; height: 22px; border-radius: 999px; background: var(--swatch); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2); }
+.ph-swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 2px var(--ph-surface), 0 0 0 4px var(--ph-text); }
+
+.ph-tools {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 10px max(8px, env(safe-area-inset-bottom));
+  background: var(--ph-surface);
+}
+.ph-tool { width: 52px; height: 44px; color: var(--ph-muted); }
+.ph-tool[aria-selected="true"] { color: var(--ph-text); background: var(--ph-raised); }
+
+/* As a dialog over the page. */
+.ph-dialog { position: fixed; inset: 0; z-index: var(--ph-z, 1000); background: #0e0e10; }
+
+@media (max-width: 640px) {
+  .ph-sliders { grid-template-columns: 1fr; }
+  .ph-panel { gap: 6px 10px; padding: 8px; }
+  .ph-btn, .ph-chip, .ph-swatch { width: 38px; height: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ph-btn, .ph-look { transition: none; }
+}

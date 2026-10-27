@@ -1,0 +1,130 @@
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/geist.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("fonts/geist-mono.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --bg: #f5f4f0;
+  --card: #ffffff;
+  --text: #121212;
+  --text-2: #45464a;
+  --text-3: #66676b;
+  --edge: rgb(18 18 18 / 0.08);
+  --mint: #2ff0b8;
+  --mint-ink: #04392a;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --mono: "Geist Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 15px/1.55 "Geist", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--mint); color: var(--mint-ink); }
+code { font-family: var(--mono); font-size: 0.92em; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+/* The editor in the demo's type. */
+.ph { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; }
+.ph-value { font-family: var(--mono); }
+
+.app > * { width: min(1040px, 100% - 32px); margin-inline: auto; }
+.bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+.brand { font-size: 17px; font-weight: 650; letter-spacing: -0.03em; }
+.icon-link {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--edge), 0 1px 2px rgb(0 0 0 / 0.04);
+  color: var(--text-2);
+  transition: color 160ms ease, transform 160ms var(--ease-out);
+}
+.icon-link:hover { color: var(--text); }
+.icon-link:active { transform: scale(0.96); }
+.icon-link svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+.intro { padding-top: 28px; }
+h1 { max-width: 22ch; margin: 0; font-size: 40px; font-weight: 650; line-height: 1.05; letter-spacing: -0.04em; text-wrap: balance; }
+.lede { max-width: 66ch; margin: 14px 0 0; color: var(--text-2); text-wrap: pretty; }
+.install { margin-top: 16px; font-size: 13.5px; }
+.install code { display: inline-block; padding: 7px 12px; border-radius: 8px; background: var(--card); box-shadow: inset 0 0 0 1px var(--edge); }
+
+.work { margin-top: 32px; }
+.pictures { display: flex; gap: 8px; margin-bottom: 12px; }
+.pictures button {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms ease;
+}
+.pictures button:active { transform: scale(0.96); }
+.pictures img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pictures [aria-checked="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--text); }
+.frame {
+  height: min(680px, 78vh);
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--edge), 0 2px 4px rgb(0 0 0 / 0.05), 0 30px 60px -36px rgb(0 0 0 / 0.5);
+}
+
+.result { display: grid; justify-items: start; gap: 10px; margin: 24px 0 0; }
+.result[hidden] { display: none; }
+.result img { max-width: min(100%, 520px); max-height: 420px; border-radius: 8px; box-shadow: 0 0 0 1px var(--edge), 0 16px 32px -24px rgb(0 0 0 / 0.45); }
+.result figcaption { display: flex; align-items: center; gap: 12px; color: var(--text-3); font-family: var(--mono); font-size: 13px; }
+
+.foot { display: grid; gap: 2px; margin-top: 48px; padding: 18px 0 36px; border-top: 1px solid var(--edge); color: var(--text-3); font-size: 13px; }
+.foot p { margin: 0; }
+
+/* The tour's finger: where a recorded touch is, pressed or about to lift. */
+.finger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.22);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.85), 0 2px 8px rgb(0 0 0 / 0.3);
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition: opacity 140ms ease, scale 140ms ease;
+}
+.finger[data-on] { opacity: 1; scale: 1; }
+.finger[data-down] { scale: 0.88; }
+
+@media (max-width: 640px) {
+  .app > * { width: min(1040px, 100% - 24px); }
+  .intro { padding-top: 16px; }
+  h1 { font-size: 30px; }
+  .frame { height: 74vh; }
+}
+
+/* In the recording, the editor fills the screen it is shown on. */
+html[data-tour] :is(.bar, .intro, .pictures, .result, .foot) { display: none; }
+html[data-tour] .app > * { width: 100%; }
+html[data-tour] .work { margin: 0; }
+html[data-tour] .frame { height: 100vh; border-radius: 0; box-shadow: none; }
