@@ -39,4 +39,4 @@ createServer(async (request, response) => {
   } catch {
     response.writeHead(404, { "content-type": "text/plain" }).end("Not found");
   }
-}).listen(PORT, "127.0.0.1", () => console.log(`grid demo: http://localhost:${PORT}/demo/`));
+}).listen(PORT, "127.0.0.1", () => console.log(`photo demo: http://localhost:${PORT}/demo/`));
