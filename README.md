@@ -2,6 +2,8 @@
 
 A photo editor for the browser, in plain TypeScript with no dependencies. Crop to a free or fixed shape, turn, flip and straighten. Adjust brightness, contrast, saturation and warmth, or pick a look. Draw, point with arrows, box, write, and hide parts of the picture behind blocks. Every change can be undone, and Done hands back the finished picture as a file.
 
+Try the [photo editor on drk.vc](https://drk.vc/repo?id=photo#preview).
+
 ![A MacBook and an iPhone running the editor in Safari: on the MacBook, a square crop is pulled in at a corner and straightened, the picture is warmed and given the Punch look, an arrow and the word gm are added, and holding compare shows the original; on the iPhone, the Noir look, a brighter picture, a pen loop, a 4:5 crop and a quarter turn](demo/preview.webp)
 
 Image editors that do this well, such as Pintura, are sold as yearly licences. This one is MIT licensed: use it in a product, change it, ship it.
